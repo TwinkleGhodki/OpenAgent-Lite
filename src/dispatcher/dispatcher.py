@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import Any, Callable, Dict, List
 
-from plugins.base import Plugin
+try:
+    from plugins.base import Plugin
+except ModuleNotFoundError:  # pragma: no cover - exercised when running via uvicorn from repo root
+    from src.plugins.base import Plugin
 
 
 class Dispatcher:

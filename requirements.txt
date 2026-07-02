@@ -1,4 +1,6 @@
 pyautogui
 selenium
 schedule
+fastapi
+uvicorn
 

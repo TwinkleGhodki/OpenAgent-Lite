@@ -2,23 +2,42 @@ from __future__ import annotations
 
 from typing import Any
 
-from actions.task_runner import (
-    delete_temp_files,
-    download_images,
-    download_pdfs,
-    open_google,
-    open_youtube,
-    rename_files,
-    search_google,
-    search_youtube,
-    send_email,
-    start_scheduler,
-    take_screenshot,
-    voice_command,
-    web_scrape,
-    write_to_file,
-)
-from plugins.base import Plugin
+try:
+    from actions.task_runner import (
+        delete_temp_files,
+        download_images,
+        download_pdfs,
+        open_google,
+        open_youtube,
+        rename_files,
+        search_google,
+        search_youtube,
+        send_email,
+        start_scheduler,
+        take_screenshot,
+        voice_command,
+        web_scrape,
+        write_to_file,
+    )
+    from plugins.base import Plugin
+except ModuleNotFoundError:  # pragma: no cover - exercised when running via uvicorn from repo root
+    from src.actions.task_runner import (
+        delete_temp_files,
+        download_images,
+        download_pdfs,
+        open_google,
+        open_youtube,
+        rename_files,
+        search_google,
+        search_youtube,
+        send_email,
+        start_scheduler,
+        take_screenshot,
+        voice_command,
+        web_scrape,
+        write_to_file,
+    )
+    from src.plugins.base import Plugin
 
 
 class OpenYouTubePlugin(Plugin):

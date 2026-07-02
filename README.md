@@ -159,10 +159,34 @@ echo 16 | python src/main.py
 
 ## Running Tests
 
-The repository includes unit tests for the dispatcher, browser manager, settings, logger, plugins, workflow engine, and LLM service:
+The repository includes unit tests for the dispatcher, browser manager, settings, logger, plugins, workflow engine, LLM service, and API:
 
 ```bash
 python -m pytest -q
+```
+
+## API Overview
+
+OpenAgent-Lite also exposes a lightweight REST API built with FastAPI. The API reuses the existing dispatcher and plugin discovery flow rather than duplicating business logic.
+
+### API endpoints
+
+- `GET /health` returns a simple health check payload
+- `GET /actions` lists all registered actions
+- `POST /execute` executes a registered action with optional positional and keyword arguments
+
+### API example
+
+```bash
+uvicorn src.api.main:app --reload
+```
+
+Then call:
+
+```bash
+curl http://127.0.0.1:8000/health
+curl http://127.0.0.1:8000/actions
+curl -X POST http://127.0.0.1:8000/execute -H "Content-Type: application/json" -d '{"action": "open_youtube"}'
 ```
 
 ## Workflow Engine Overview

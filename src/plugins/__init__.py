@@ -19,7 +19,10 @@ def discover_plugins() -> List[Plugin]:
         if module_info.name == "base":
             continue
 
-        module = importlib.import_module(f"plugins.{module_info.name}")
+        try:
+            module = importlib.import_module(f"plugins.{module_info.name}")
+        except ModuleNotFoundError:
+            module = importlib.import_module(f"src.plugins.{module_info.name}")
         for _, obj in vars(module).items():
             if isinstance(obj, type) and issubclass(obj, Plugin) and obj is not Plugin:
                 plugin = obj()
