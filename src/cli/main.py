@@ -1,37 +1,18 @@
 import ast
-from typing import Any, Dict, Tuple
+from typing import Any, Tuple
 
-from task_runner import (
-    open_youtube, rename_files, delete_temp_files, search_youtube,
-    download_pdfs, send_email, start_scheduler, open_google, search_google,
-    download_images, take_screenshot, write_to_file,
-    voice_command, web_scrape
-)
-
-from scheduler import run_scheduler
 from llm_agent import run_llm_agent
 
 from browser_manager import close_driver
 from dispatcher.dispatcher import Dispatcher
+from plugins import discover_plugins
 
 
 def build_dispatcher() -> Dispatcher:
-    """Create a dispatcher and register the existing automation actions."""
+    """Create a dispatcher and register the existing automation actions via plugins."""
     dispatcher = Dispatcher()
-    dispatcher.register("open_youtube", open_youtube)
-    dispatcher.register("rename_files", rename_files)
-    dispatcher.register("delete_temp_files", delete_temp_files)
-    dispatcher.register("search_youtube", search_youtube)
-    dispatcher.register("download_pdfs", download_pdfs)
-    dispatcher.register("send_email", send_email)
-    dispatcher.register("start_scheduler", start_scheduler)
-    dispatcher.register("open_google", open_google)
-    dispatcher.register("search_google", search_google)
-    dispatcher.register("download_images", download_images)
-    dispatcher.register("take_screenshot", take_screenshot)
-    dispatcher.register("write_to_file", write_to_file)
-    dispatcher.register("voice_command", voice_command)
-    dispatcher.register("web_scrape", web_scrape)
+    for plugin in discover_plugins():
+        dispatcher.register_plugin(plugin)
     return dispatcher
 
 

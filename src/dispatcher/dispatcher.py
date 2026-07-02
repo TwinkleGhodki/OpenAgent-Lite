@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Callable, Dict, List
 
+from plugins.base import Plugin
+
 
 class Dispatcher:
     """Central registry for dispatching named actions to Python callables."""
@@ -16,6 +18,14 @@ class Dispatcher:
         if not callable(function):
             raise TypeError("Registered value must be callable")
         self._registry[action_name] = function
+
+    def register_plugin(self, plugin: Plugin) -> None:
+        """Register a plugin instance under its configured name."""
+        if not isinstance(plugin, Plugin):
+            raise TypeError("Plugin must inherit from Plugin")
+        if not plugin.name:
+            raise ValueError("Plugin name cannot be empty")
+        self.register(plugin.name, plugin.execute)
 
     def execute(self, action_name: str, *args: Any, **kwargs: Any) -> Any:
         """Execute a registered action with the provided arguments."""
