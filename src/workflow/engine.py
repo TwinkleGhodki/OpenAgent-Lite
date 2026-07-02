@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from dispatcher.dispatcher import Dispatcher
 
@@ -24,6 +26,45 @@ class Workflow:
     def add_step(self, step: WorkflowStep) -> None:
         """Append a step to the workflow."""
         self.steps.append(step)
+
+    def save(self, path: str | Path) -> None:
+        """Persist the workflow to a JSON file."""
+        payload = {
+            "steps": [
+                {
+                    "action_name": step.action_name,
+                    "args": list(step.args),
+                    "kwargs": step.kwargs,
+                }
+                for step in self.steps
+            ]
+        }
+        Path(path).write_text(json.dumps(payload, indent=2))
+
+    @classmethod
+    def load(cls, path: str | Path) -> "Workflow":
+        """Load a workflow from a JSON file."""
+        file_path = Path(path)
+        try:
+            payload = json.loads(file_path.read_text())
+        except FileNotFoundError as exc:
+            raise ValueError(f"Invalid workflow file: {file_path}") from exc
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Invalid workflow file: {file_path}") from exc
+
+        if not isinstance(payload, dict) or "steps" not in payload or not isinstance(payload["steps"], list):
+            raise ValueError(f"Invalid workflow file: {file_path}")
+
+        steps = [
+            WorkflowStep(
+                action_name=step.get("action_name", ""),
+                args=tuple(step.get("args", [])),
+                kwargs=step.get("kwargs", {}),
+            )
+            for step in payload["steps"]
+            if isinstance(step, dict)
+        ]
+        return cls(steps)
 
 
 class WorkflowExecutor:
