@@ -1,9 +1,11 @@
 import ollama
 import re
 
+from config.settings import settings
+
 def run_llm_agent(user_goal):
     response = ollama.chat(
-        model='phi3:3.8b-mini-128k-instruct-q4_0',
+        model=settings.ollama_model,
         messages=[
             {
                 "role": "system",

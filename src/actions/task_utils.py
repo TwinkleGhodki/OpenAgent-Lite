@@ -6,6 +6,8 @@ from email.mime.application import MIMEApplication
 from datetime import datetime
 import pyautogui
 
+from config.settings import settings
+
 def take_screenshot():
     try:
         screenshot = ImageGrab.grab()
@@ -17,8 +19,8 @@ def take_screenshot():
 
 def send_email(subject, body, to_email, attachment_path=None):
     try:
-        sender_email = "twinkle.ghodki04@gmail.com"
-        app_password = "zjyjhrharmxokqxg" 
+        sender_email = settings.gmail_email
+        app_password = settings.gmail_password
 
         msg = MIMEMultipart()
         msg['From'] = sender_email
@@ -32,7 +34,7 @@ def send_email(subject, body, to_email, attachment_path=None):
                 part['Content-Disposition'] = f'attachment; filename="{os.path.basename(attachment_path)}"'
                 msg.attach(part)
 
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server = smtplib.SMTP(settings.smtp_server, settings.smtp_port)
         server.starttls()
         server.login(sender_email, app_password)
         server.send_message(msg)

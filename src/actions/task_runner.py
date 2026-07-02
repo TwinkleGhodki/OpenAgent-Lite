@@ -20,6 +20,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from browser_manager import get_driver, close_driver
+from config.settings import settings
 
 import schedule
 import time
@@ -37,7 +38,7 @@ def scheduled_email():
     print("📧 Scheduled email task running...")
     subject = "Automated Update"
     body = "This is a scheduled message sent from the automation system."
-    to_email = "twinkle.ghodki04@gmail.com"
+    to_email = settings.gmail_email
     send_email(subject, body, to_email)
 
 def scheduled_scrape():
@@ -108,9 +109,10 @@ def search_youtube(search_query):
         log_action(f"Search YouTube for '{search_query}'", f"Failed - {e}")
 
 # 5: Download PDFs
-def download_pdfs(url, download_folder='downloads'):
+def download_pdfs(url, download_folder=None):
     try:
-        os.makedirs(download_folder, exist_ok=True)
+        target_dir = download_folder or settings.download_dir
+        os.makedirs(target_dir, exist_ok=True)
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
         pdf_links = [urljoin(url, link.get("href")) for link in soup.find_all("a") if link.get("href", "").endswith(".pdf")]
@@ -119,7 +121,7 @@ def download_pdfs(url, download_folder='downloads'):
             log_action(f"Download PDFs from {url}", "No PDFs Found")
             return
         for pdf_url in pdf_links:
-            filename = os.path.join(download_folder, pdf_url.split("/")[-1])
+            filename = os.path.join(target_dir, pdf_url.split("/")[-1])
             with requests.get(pdf_url, stream=True) as r:
                 with open(filename, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=8192):
@@ -132,8 +134,8 @@ def download_pdfs(url, download_folder='downloads'):
 # 6: Send Email
 def send_email(subject, body, to_email, attachment_path=None):
     try:
-        sender_email = "twinkle.ghodki04@gmail.com"
-        app_password = "zjyjhrharmxokqxg" 
+        sender_email = settings.gmail_email
+        app_password = settings.gmail_password
 
         msg = MIMEMultipart()
         msg['From'] = sender_email
@@ -147,7 +149,7 @@ def send_email(subject, body, to_email, attachment_path=None):
                 part['Content-Disposition'] = f'attachment; filename="{os.path.basename(attachment_path)}"'
                 msg.attach(part)
 
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server = smtplib.SMTP(settings.smtp_server, settings.smtp_port)
         server.starttls()
         server.login(sender_email, app_password)
         server.send_message(msg)
@@ -185,10 +187,10 @@ def search_google(query):
 # 9: Download Images using Pexels API
 def download_images(query, num_images=1):
     try:
-        folder_path = "downloaded_images"
+        folder_path = settings.downloaded_images_dir
         os.makedirs(folder_path, exist_ok=True)
 
-        api_key = "PzI4THcRPNfklycoPlXfyVzqFkeW36M3rWOJhomQ5nN8gnt0IzBJ600j"  
+        api_key = settings.pexels_api_key
         headers = {
             "Authorization": api_key
         }
@@ -229,7 +231,7 @@ def download_images(query, num_images=1):
 def take_screenshot():
     try:
         screenshot = ImageGrab.grab()
-        screenshot.save("screenshot.png")
+        screenshot.save(settings.screenshot_path)
         print("Screenshot saved as screenshot.png")
         log_action("Take Screenshot", "Success")
     except Exception as e:

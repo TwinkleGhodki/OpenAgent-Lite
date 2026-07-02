@@ -2,6 +2,8 @@
 
 from selenium import webdriver
 
+from config.settings import settings
+
 _driver = None
 
 def get_driver():

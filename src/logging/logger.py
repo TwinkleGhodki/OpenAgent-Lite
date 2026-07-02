@@ -1,9 +1,11 @@
 import os
 import datetime
 
+from config.settings import settings
+
 # Get absolute path to logs folder
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOG_DIR = os.path.join(BASE_DIR, 'logs')
+LOG_DIR = settings.logs_dir
 LOG_FILE = os.path.join(LOG_DIR, 'execution.log')
 
 # Make sure logs directory exists

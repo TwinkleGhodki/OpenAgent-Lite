@@ -2,3 +2,9 @@ __pycache__/
 *.pyc
 *.log
 venv/
+.venv/
+.env
+logs/
+downloaded_images/
+downloads/
+
