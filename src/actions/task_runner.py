@@ -3,7 +3,7 @@ import shutil
 import pyautogui
 import time
 from selenium import webdriver
-from logger import log_action
+from app_logging.logger import get_logger, log_action
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import requests
@@ -29,6 +29,8 @@ import os
 
 # Import your existing task functions
 from task_utils import take_screenshot, send_email, web_scrape  # adjust if paths differ
+
+logger = get_logger(__name__)
 
 def scheduled_screenshot():
     print("📷 Scheduled screenshot task running...")
@@ -118,6 +120,7 @@ def download_pdfs(url, download_folder=None):
         pdf_links = [urljoin(url, link.get("href")) for link in soup.find_all("a") if link.get("href", "").endswith(".pdf")]
         if not pdf_links:
             print("No PDFs found on the page.")
+            logger.warning("No PDFs found on the page for %s", url)
             log_action(f"Download PDFs from {url}", "No PDFs Found")
             return
         for pdf_url in pdf_links:
@@ -127,8 +130,10 @@ def download_pdfs(url, download_folder=None):
                     for chunk in r.iter_content(chunk_size=8192):
                         f.write(chunk)
             print(f"Downloaded: {filename}")
+            logger.info("Downloaded PDF to %s", filename)
         log_action(f"Download PDFs from {url}", "Success")
     except Exception as e:
+        logger.exception("Failed to download PDFs from %s", url)
         log_action(f"Download PDFs from {url}", f"Failed - {e}")
 
 # 6: Send Email
@@ -159,6 +164,7 @@ def send_email(subject, body, to_email, attachment_path=None):
         log_action("Send Email", "Success")
 
     except Exception as e:
+        logger.exception("Email sending failed")
         log_action("Send Email", f"Failed - {e}")
 
 # 7: Open Google
@@ -224,6 +230,7 @@ def download_images(query, num_images=1):
 
     except Exception as e:
         print(f"Error while downloading images: {e}")
+        logger.exception("Image download failed for query %s", query)
         log_action(f"Download Images for '{query}'", f"Failed - {e}")
 
 
@@ -235,6 +242,7 @@ def take_screenshot():
         print("Screenshot saved as screenshot.png")
         log_action("Take Screenshot", "Success")
     except Exception as e:
+        logger.exception("Screenshot capture failed")
         log_action("Take Screenshot", f"Failed - {e}")
 
 # 11: Write to File
@@ -245,6 +253,7 @@ def write_to_file(file_path, content):
         print(f"Written to file: {file_path}")
         log_action(f"Write to File {file_path}", "Success")
     except Exception as e:
+        logger.exception("Failed to write file %s", file_path)
         log_action(f"Write to File {file_path}", f"Failed - {e}")
 
 # 12: Voice Command
@@ -274,5 +283,6 @@ def web_scrape(url):
         print(soup.get_text(strip=True)[:500])
         log_action(f"Web Scrape for {url}", "Success")
     except Exception as e:
+        logger.exception("Web scraping failed for %s", url)
         log_action(f"Web Scrape for {url}", f"Failed - {e}")
         print(f"Error: {e}")

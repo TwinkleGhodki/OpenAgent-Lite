@@ -1,1 +1,1 @@
-from logging.logger import *
+from app_logging.logger import *

@@ -28,6 +28,7 @@ class Settings:
     browser_timeout: int = int(os.getenv("BROWSER_TIMEOUT", "30"))
     smtp_server: str = os.getenv("SMTP_SERVER", "smtp.gmail.com")
     smtp_port: int = int(os.getenv("SMTP_PORT", "587"))
+    log_level: str = os.getenv("LOG_LEVEL", "INFO")
 
 
 settings = Settings()
