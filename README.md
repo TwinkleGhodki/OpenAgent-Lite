@@ -1,275 +1,441 @@
 # OpenAgent-Lite
 
-OpenAgent-Lite is a lightweight Python automation project that combines a simple command-line interface, plugin-based action registration, an LLM-assisted task parser, and a workflow engine for coordinating multiple automation actions.
+![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.116-green?logo=fastapi)
+![Docker](https://img.shields.io/badge/Docker-Supported-2496ED?logo=docker)
 
-## Overview
 
-The repository currently focuses on a modular automation workflow with these building blocks:
+> A modular AI-powered automation framework built with Python that combines browser automation, workflow orchestration, plugins, and REST APIs.
 
-- a CLI entrypoint for manual interaction
-- a dispatcher for routing named actions
-- a plugin system for registering action implementations
-- a workflow engine for chaining multiple dispatcher calls
-- browser automation through Selenium and Chrome
-- optional LLM-based task decomposition through Ollama
-- centralized settings and structured logging
+OpenAgent-Lite is a lightweight automation framework that executes browser, desktop, and file automation tasks through a clean and extensible architecture. It supports both an interactive CLI and a FastAPI-based REST API while emphasizing modular design, maintainability, and software engineering best practices.
 
-## Key Features
+---
 
-- Interactive command-line automation menu
-- Browser automation for common web actions
-- File and folder operations
-- Screenshot capture
-- Email sending with optional attachments
-- Web scraping and PDF download helpers
-- Optional LLM-driven task decomposition via Ollama
-- Plugin-based action registration
-- Lightweight workflow execution for sequential tasks
-- Centralized configuration and logging
+## ✨ Features
 
-## Technology Stack
+| Feature | Description |
+|----------|-------------|
+| AI Task Planning | Natural language task decomposition using Ollama(Gemma 3 / Phi-3) |
+| Browser Automation | Selenium-based browser automation |
+| REST API | Execute automation through FastAPI endpoints |
+| Plugin System | Easily add new automation actions |
+| Workflow Engine | Execute multi-step automation workflows |
+| Workflow Persistence | Save and load workflows as JSON |
+| Email & File Automation | Email, screenshots, downloads, and file operations |
+| Configuration | Environment-based settings using `.env` |
+| Structured Logging | Centralized logging and error tracking |
+| Testing | 21 automated unit tests using Pytest |
+| CI/CD | GitHub Actions workflow |
+| Docker | Containerized deployment |
 
-| Area | Technologies |
-| --- | --- |
-| Language | Python 3.13+ |
-| Browser automation | Selenium, Chrome WebDriver |
-| LLM integration | Ollama, requests |
-| Scheduling | schedule |
-| UI automation | pyautogui |
-| Image handling | Pillow |
-| Environment management | python-dotenv |
-| Testing | pytest |
+---
 
-## Current Architecture Overview
+## 🛠 Tech Stack
 
-The application follows a simple layered structure:
+| Category | Technologies |
+|----------|--------------|
+| Language | Python 3.13 |
+| Backend | FastAPI |
+| Browser Automation | Selenium |
+| AI Integration | Ollama(Gemma 3 / Phi-3) |
+| Automation | PyAutoGUI |
+| Web Parsing | BeautifulSoup |
+| Configuration | python-dotenv |
+| Testing | Pytest |
+| CI/CD | GitHub Actions |
+| Deployment | Docker |
+
+---
+
+## 🏗 Architecture
 
 ```mermaid
 flowchart TD
-    A[CLI] --> B[Dispatcher]
+    A[CLI / FastAPI] --> B[Dispatcher]
     B --> C[Plugins]
     B --> D[Workflow Engine]
     C --> E[Task Runner]
     E --> F[Browser Manager]
-    E --> G[LLM Agent]
-    E --> H[Settings & Logger]
+    E --> G[LLM Service]
+    E --> H[Configuration]
+    E --> I[Logging]
 ```
 
-### Runtime flow
+### Request Flow
 
-1. The CLI collects user input and calls the dispatcher.
-2. The dispatcher executes registered actions or plugin-backed actions.
-3. The workflow engine can orchestrate several dispatcher calls in sequence.
-4. Individual actions use the shared task runner, browser manager, settings, and logger modules.
+```
+CLI / REST API
+       │
+       ▼
+ Dispatcher
+       │
+ Plugins / Workflow
+       │
+ Task Runner
+       │
+ Browser • LLM • File System • Logging
+```
 
-## Folder Structure
+The modular architecture allows new features to be added without modifying the core execution flow.
+
+---
+
+# 📸 Project Preview
+
+### Interactive CLI
+
+![CLI Menu](assets/cli-menu.png)
+
+---
+
+### Browser Automation (Selenium)
+
+![Browser Automation](assets/browser-automation.png)
+
+---
+
+### FastAPI Swagger Documentation
+
+![Swagger API](assets/swagger-api.png)
+
+---
+
+## 📁 Project Structure
 
 ```text
-src/
-  actions/
-    browser/
-    task_runner.py
-  app_logging/
-  cli/
-  config/
-  dispatcher/
-  llm/
-  plugins/
-  workflow/
-  browser_manager.py
-  logger.py
-  llm_agent.py
-  main.py
-  scheduler.py
-  task_runner.py
-  task_utils.py
-tests/
-  test_browser_manager.py
-  test_dispatcher.py
-  test_llm_service.py
-  test_logger.py
-  test_plugins.py
-  test_settings.py
-  test_workflow.py
+OpenAgent-Lite
+│
+├── src/
+│   ├── actions/
+│   ├── api/
+│   ├── app_logging/
+│   ├── cli/
+│   ├── config/
+│   ├── dispatcher/
+│   ├── llm/
+│   ├── plugins/
+│   ├── workflow/
+│   └── main.py
+│
+├── tests/
+├── .github/workflows/
+├── Dockerfile
+├── requirements.txt
+├── .env.example
+└── README.md
 ```
 
-## Installation
+---
 
-1. Clone the repository.
-2. Create and activate a virtual environment:
+## 🎯 Project Highlights
+
+OpenAgent-Lite was built to demonstrate modern software engineering practices through a modular automation framework.
+
+Key concepts implemented include:
+
+- Command Pattern (Dispatcher)
+- Plugin-based architecture
+- Workflow orchestration with JSON persistence
+- FastAPI REST API
+- Browser automation using Selenium
+- AI-assisted task planning with Ollama(Gemma 3 / Phi-3)
+- Centralized configuration and structured logging
+- Automated testing with Pytest
+- Continuous Integration using GitHub Actions
+- Dockerized deployment
+
+---
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+- Python 3.13+
+- Google Chrome & ChromeDriver
+- Git
+- Ollama *(optional)*
+- Docker *(optional)*
+
+---
+
+## ⚙️ Installation
+
+### Clone the repository
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+git clone https://github.com/TwinkleGhodki/OpenAgent-Lite.git
+cd OpenAgent-Lite
 ```
 
-On Windows PowerShell:
+### Create a virtual environment
+
+**Windows**
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-3. Install dependencies:
+**Linux / macOS**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. If you want to use the LLM-based task parser, make sure Ollama is available and reachable at the configured host.
+---
 
-## Environment Variables
+## 🔐 Environment Configuration
 
-Copy the example environment file and adjust values as needed:
+Create a `.env` file from the provided template.
 
-```bash
+**Windows**
+
+```powershell
 copy .env.example .env
 ```
 
-The application reads the following settings from the environment:
+**Linux / macOS**
 
-| Variable | Purpose | Default |
-| --- | --- | --- |
-| GMAIL_EMAIL | Email sender address | empty |
-| GMAIL_PASSWORD | Email password or app password | empty |
-| OLLAMA_HOST | Ollama service URL | http://localhost:11434 |
-| OLLAMA_MODEL | Ollama model name | phi3:3.8b-mini-128k-instruct-q4_0 |
-| BROWSER_TIMEOUT | Browser timeout in seconds | 30 |
-| DOWNLOAD_DIR | Download destination | downloads/ |
-| LOGS_DIR | Log output directory | logs/ |
-| DOWNLOADED_IMAGES_DIR | Image download location | downloaded_images/ |
-| SCREENSHOT_PATH | Screenshot output path | screenshot.png |
-| SMTP_SERVER | SMTP host | smtp.gmail.com |
-| SMTP_PORT | SMTP port | 587 |
-| LOG_LEVEL | Logging level | INFO |
+```bash
+cp .env.example .env
+```
 
-## Running the Application
+Update the required values in the `.env` file.
 
-Start the interactive CLI from the project root:
+| Variable | Purpose |
+|----------|---------|
+| GMAIL_EMAIL | Sender email |
+| GMAIL_PASSWORD | Gmail App Password |
+| OLLAMA_HOST | Ollama server URL |
+| OLLAMA_MODEL | LLM model |
+| BROWSER_TIMEOUT | Browser timeout |
+| DOWNLOAD_DIR | Download directory |
+| LOGS_DIR | Log directory |
+| SCREENSHOT_PATH | Screenshot location |
+| SMTP_SERVER | SMTP host |
+| SMTP_PORT | SMTP port |
+
+> **Note:** Keep your `.env` file private and never commit it to GitHub.
+---
+
+# ▶️ Running the Application
+
+OpenAgent-Lite supports both a **CLI** and a **REST API**.
+
+## CLI
+
+Launch the interactive application:
 
 ```bash
 python src/main.py
 ```
 
-To run the menu non-interactively and exit immediately after selecting the exit option:
+---
 
-```bash
-echo 16 | python src/main.py
-```
+## REST API
 
-## Running Tests
-
-The repository includes unit tests for the dispatcher, browser manager, settings, logger, plugins, workflow engine, LLM service, and API:
-
-```bash
-python -m pytest -q
-```
-
-## API Overview
-
-OpenAgent-Lite also exposes a lightweight REST API built with FastAPI. The API reuses the existing dispatcher and plugin discovery flow rather than duplicating business logic.
-
-### API endpoints
-
-- `GET /health` returns a simple health check payload
-- `GET /actions` lists all registered actions
-- `POST /execute` executes a registered action with optional positional and keyword arguments
-
-### API example
+Start the FastAPI server:
 
 ```bash
 uvicorn src.api.main:app --reload
 ```
 
-Then call:
+Access the API at:
+
+| Service | URL |
+|---------|-----|
+| API | http://127.0.0.1:8000 |
+| Swagger UI | http://127.0.0.1:8000/docs |
+| ReDoc | http://127.0.0.1:8000/redoc |
+
+---
+
+# 🌐 API Endpoints
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/health` | Health check |
+| GET | `/actions` | List available actions |
+| POST | `/execute` | Execute a registered action |
+
+### Example Request
+
+```json
+{
+  "action": "open_google",
+  "args": [],
+  "kwargs": {}
+}
+```
+
+### Example Response
+
+```json
+{
+  "action": "open_google",
+  "result": "Browser launched successfully."
+}
+```
+
+---
+
+# 🐳 Docker
+
+Build the image:
 
 ```bash
-curl http://127.0.0.1:8000/health
-curl http://127.0.0.1:8000/actions
-curl -X POST http://127.0.0.1:8000/execute -H "Content-Type: application/json" -d '{"action": "open_youtube"}'
+docker build -t openagent-lite .
 ```
 
-## Workflow Engine Overview
+Run the container:
 
-The workflow engine is an additive orchestration layer built on top of the dispatcher. It lets you define an ordered sequence of executable steps and collects results for each step.
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant WorkflowExecutor
-    participant Dispatcher
-    User->>WorkflowExecutor: Execute workflow
-    WorkflowExecutor->>Dispatcher: Run step 1
-    Dispatcher-->>WorkflowExecutor: Result
-    WorkflowExecutor->>Dispatcher: Run step 2
-    Dispatcher-->>WorkflowExecutor: Result
+```bash
+docker run --rm -it --env-file .env openagent-lite
 ```
 
-A workflow stops as soon as a step fails and returns the results collected so far.
+---
 
-## Plugin Architecture Overview
+# 🧪 Running Tests
 
-Plugins provide a lightweight mechanism for registering actions without changing the dispatcher interface. Each plugin defines a name and an `execute()` method and is discovered automatically from the plugins package.
+Execute the complete test suite:
 
-## Dispatcher Overview
+```bash
+python -m pytest -q
+```
 
-The dispatcher is the main routing layer for action execution. It:
+Current automated tests cover:
 
-- registers named actions and plugin-backed actions
-- executes registered callables
-- preserves the existing public action names used by the CLI
+- Dispatcher
+- Plugin System
+- Workflow Engine & Persistence
+- FastAPI API
+- Browser Manager
+- Configuration
+- Logging
+- LLM Service
 
-## Example Usage
+---
 
-### Manual CLI
+---
 
-Run the app and choose an option from the menu for tasks such as:
+## 🔄 Continuous Integration
 
-- opening YouTube or Google
-- searching the web
-- downloading PDFs
-- sending an email
-- taking a screenshot
-- writing to a file
-- using the LLM-assisted task parser
+Every push and pull request automatically triggers a GitHub Actions workflow that:
 
-### Workflow example
+- Installs project dependencies
+- Runs the complete Pytest suite
+- Validates the build
+
+---
+
+## 💻 Example Usage
+
+### CLI
+
+```bash
+python src/main.py
+```
+
+### REST API
 
 ```python
-from dispatcher.dispatcher import Dispatcher
-from workflow.engine import Workflow, WorkflowExecutor, WorkflowStep
+import requests
 
-dispatcher = Dispatcher()
-dispatcher.register("greet", lambda: "hello")
-dispatcher.register("echo", lambda value: value)
+response = requests.post(
+    "http://127.0.0.1:8000/execute",
+    json={
+        "action": "open_google",
+        "args": [],
+        "kwargs": {}
+    }
+)
 
-workflow = Workflow([
-    WorkflowStep("greet"),
-    WorkflowStep("echo", args=("world",)),
-])
-
-executor = WorkflowExecutor(dispatcher)
-results = executor.execute(workflow)
+print(response.json())
 ```
 
-## Future Roadmap
+---
 
-Possible next steps for the project include:
+# 🏛 Software Architecture
 
-- expanding the action catalog
-- improving error handling for browser and LLM actions
-- adding richer workflow composition features
-- improving plugin packaging and discovery
-- documenting deployment and operational usage patterns
+OpenAgent-Lite follows a modular architecture built around reusable components.
 
-## Contributing
+| Component | Responsibility |
+|-----------|----------------|
+| Dispatcher | Routes automation requests using the Command Pattern |
+| Plugin System | Registers and extends automation actions |
+| Workflow Engine | Executes and persists multi-step workflows |
+| Browser Manager | Manages Selenium WebDriver lifecycle |
+| LLM Service | Handles Ollama-based task planning |
+| Configuration | Centralized environment-based settings |
+| Logging | Structured application logging |
+| REST API | Exposes automation through FastAPI |
 
-Contributions are welcome. If you would like to improve the project, please:
+---
 
-1. open an issue describing the enhancement or bug fix
-2. create a branch for your work
-3. submit a pull request with a clear summary of the change
+# 🧪 Testing
 
-## License
+The project includes **21 automated tests** covering:
 
-This repository does not currently include a dedicated license file. If you plan to distribute or reuse the project publicly, add an appropriate license before doing so.
+- Dispatcher
+- Plugin System
+- Workflow Engine
+- Workflow Persistence
+- REST API
+- Browser Manager
+- Configuration
+- Logging
+- LLM Service
+
+Run all tests:
+
+```bash
+python -m pytest -q
+```
+
+---
+
+# 💡 Engineering Highlights
+
+During development, the project was refactored from a script-based automation tool into a modular software engineering project by:
+
+- Replacing `eval()` / `exec()` with a centralized Dispatcher.
+- Introducing a Plugin Architecture for extensibility.
+- Building a Workflow Engine with JSON persistence.
+- Exposing the framework through a FastAPI REST API.
+- Centralizing configuration using environment variables.
+- Adding structured logging, automated testing, CI/CD, and Docker support.
+
+---
+
+# 🔮 Future Improvements
+
+Potential future enhancements include:
+
+- Parallel workflow execution
+- Additional automation plugins
+- Authentication for REST APIs
+- Workflow scheduling
+- Web dashboard
+- Support for additional LLM providers
+
+---
+
+# 👨‍💻 Author
+
+**Twinkle Ghodki**
+
+Computer Science Undergraduate passionate about Software Engineering, AI, and Full-Stack Development.
+
+- GitHub: https://github.com/TwinkleGhodki
+- LinkedIn: https://linkedin.com/in/twinkleghodki
+
+---
+
+⭐ If you found this project useful, consider giving it a star!
