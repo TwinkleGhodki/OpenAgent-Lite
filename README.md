@@ -13,6 +13,8 @@ OpenAgent-Lite is a lightweight automation framework that executes browser, desk
 
 ## 🎥 Demo
 
+The following demonstration shows OpenAgent-Lite receiving a natural language command, generating executable subtasks using a local LLM (Gemma 3/Phi-3 via Ollama), and automatically performing browser automation through its plugin-based execution engine.
+
 https://github.com/TwinkleGhodki/OpenAgent-Lite/blob/OpenAgent-Lite/assets/demo.mp4
 
 ---
