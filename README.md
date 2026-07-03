@@ -11,6 +11,12 @@ OpenAgent-Lite is a lightweight automation framework that executes browser, desk
 
 ---
 
+## 🎥 Demo
+
+https://github.com/TwinkleGhodki/OpenAgent-Lite/blob/OpenAgent-Lite/assets/demo.mp4
+
+---
+
 ## ✨ Features
 
 | Feature | Description |
