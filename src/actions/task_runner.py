@@ -1,19 +1,12 @@
-import os
-import shutil
-import pyautogui
-import time
 from selenium import webdriver
 from app_logging.logger import get_logger, log_action
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import requests
-from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
-import webbrowser
 from PIL import ImageGrab
 import speech_recognition as sr
 import requests
@@ -31,6 +24,7 @@ import os
 from task_utils import take_screenshot, send_email, web_scrape  # adjust if paths differ
 
 logger = get_logger(__name__)
+scheduler_started = False
 
 def scheduled_screenshot():
     print("📷 Scheduled screenshot task running...")
@@ -49,15 +43,21 @@ def scheduled_scrape():
     web_scrape(url)
 
 def start_scheduler():
-    print("Scheduler started. Press Ctrl+C to exit.")
+    global scheduler_started
 
-    # 🕐 Schedule your tasks
+    if scheduler_started:
+        print("Scheduler is already running.")
+        return
+
+    scheduler_started = True
+    print("Scheduler started.")
+
     schedule.every(1).minutes.do(scheduled_screenshot)
     schedule.every(5).minutes.do(scheduled_email)
     schedule.every(10).minutes.do(scheduled_scrape)
 
     def run_schedule():
-        while True:
+        while scheduler_started:
             schedule.run_pending()
             time.sleep(1)
 

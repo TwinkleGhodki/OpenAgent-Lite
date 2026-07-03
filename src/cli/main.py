@@ -67,7 +67,7 @@ def execute_subtasks(subtasks: list[str], dispatcher: Dispatcher) -> None:
 
 
 def execute_voice_command(dispatcher: Dispatcher) -> None:
-    command = voice_command()
+    command = dispatcher.execute("voice_command")
     if command:
         subtasks = run_llm_agent(command)
         if subtasks:

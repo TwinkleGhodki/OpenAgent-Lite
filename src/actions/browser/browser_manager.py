@@ -32,8 +32,20 @@ class BrowserManager:
         self._initialized = True
 
     def get_driver(self):
-        if self._driver is None:
-            self._driver = self._create_driver()
+        if self._driver is not None:
+            try:
+                # Check whether the current session is still alive
+                self._driver.current_url
+                return self._driver
+            except Exception:
+                logger.warning("Previous browser session became invalid. Creating a new browser instance.")
+            try:
+                self._driver.quit()
+            except Exception:
+                pass
+            self._driver = None
+
+        self._driver = self._create_driver()
         return self._driver
 
     def _create_driver(self):
